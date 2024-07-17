@@ -1,35 +1,50 @@
+import java.util.ArrayList;
+import java.util.List;
+
 public class Order {
     private String id;
     private int itemCount;
     private double itemCost;
     private double totalPrice;
     private double shippingCost;
+    private List<OrderObserver> observers;
 
-    // Constructeur
+
     public Order(String id) {
-        // Implémentation du constructeur
+        this.id = id;
+        this.itemCount = 0;
+        this.itemCost = 0.0;
+        this.totalPrice = 0.0;
+        this.shippingCost = 10.0;  // Coût de livraison par défaut
+        this.observers = new ArrayList<>();
     }
 
-    // Méthode pour ajouter un article
+
     public void addItem(double price) {
-        // Implémentation de la méthode
+        this.itemCount++;
+        this.itemCost += price;
+        this.totalPrice += price;
+        notifyObservers();
     }
 
-    // Méthodes pour ajouter et supprimer des observateurs
+
     public void addObserver(OrderObserver observer) {
-        // Implémentation de la méthode
+        this.observers.add(observer);
     }
+
 
     public void removeObserver(OrderObserver observer) {
-        // Implémentation de la méthode
+        this.observers.remove(observer);
     }
 
-    // Méthode pour notifier les observateurs
+
     private void notifyObservers() {
-        // Implémentation de la méthode
+        for (OrderObserver observer : observers) {
+            observer.update(this);
+        }
     }
 
-    // Getters et setters
+
     public String getId() {
         return id;
     }
@@ -40,7 +55,6 @@ public class Order {
 
     public double getItemCost() {
         return itemCost;
-        //Hello
     }
 
     public double getTotalPrice() {
@@ -57,5 +71,16 @@ public class Order {
 
     public void setShippingCost(double shippingCost) {
         this.shippingCost = shippingCost;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "id='" + id + '\'' +
+                ", itemCount=" + itemCount +
+                ", itemCost=" + itemCost +
+                ", totalPrice=" + totalPrice +
+                ", shippingCost=" + shippingCost +
+                '}';
     }
 }
